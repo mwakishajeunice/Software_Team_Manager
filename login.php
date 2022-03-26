@@ -29,7 +29,7 @@ header("location:index.php?page=home");
     <div class="card-body login-card-body">
       <form action="" id="login-form">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" required placeholder="Email">
+          <input type="email" class="form-control" id="email" name="email" required placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -43,6 +43,9 @@ header("location:index.php?page=home");
               <span class="fas fa-lock"></span>
             </div>
           </div>
+        </div>
+        <div class="form-group mb-2 text-right">
+            <button class="btn btn-light btn-sm"  type="submit" id="forgot-pass-btn">Forgot Password?</button>
         </div>
         <div class="row">
           <div class="col-8">
@@ -68,29 +71,63 @@ header("location:index.php?page=home");
 <script>
   $(document).ready(function(){
     $('#login-form').submit(function(e){
-    e.preventDefault()
-    start_load()
-    if($(this).find('.alert-danger').length > 0 )
-      $(this).find('.alert-danger').remove();
-    $.ajax({
-      url:'ajax.php?action=login',
-      method:'POST',
-      data:$(this).serialize(),
-      error:err=>{
-        console.log(err)
-        end_load();
-
-      },
-      success:function(resp){
-        if(resp == 1){
-          location.href ='index.php?page=home';
-        }else{
-          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
+      e.preventDefault()
+      start_load()
+      if($(this).find('.alert-danger').length > 0 )
+        $(this).find('.alert-danger').remove();
+      $.ajax({
+        url:'ajax.php?action=login',
+        method:'POST',
+        data:$(this).serialize(),
+        error:err=>{
+          console.log(err)
           end_load();
+
+        },
+        success:function(resp){
+          if(resp == 1){
+            location.href ='index.php?page=home';
+          }else{
+            $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
+            end_load();
+          }
         }
-      }
+      })
     })
-  })
+    $('#forgot-pass-btn').click(function(e){
+      e.preventDefault()
+      start_load()
+      if($(this).find('.alert-danger').length > 0 )
+        $(this).find('.alert-danger').remove();
+     
+      $.ajax({
+        url:'ajax.php?action=forgot_pwd',
+        method:'POST',
+        data: $('#login-form').serialize(),
+        error:err=>{
+          console.log(err)
+          end_load();
+
+        },
+        success:function(resp){
+          console.log({resp});
+
+          if(resp == 1){
+            location.href ='index.php?page=login';
+          }else if(resp == 2){
+            $('#login-form').prepend('<div class="alert alert-danger">Could not perform action. Try later.</div>')
+            end_load();
+          }else if(resp == 3){
+            $('#login-form').prepend('<div class="alert alert-danger">Could not update password. Try later.</div>')
+            end_load();
+          } else {
+            $('#login-form').prepend('<div class="alert alert-danger">No account is associated with this email</div>')
+            end_load();
+          }
+          
+        }
+      })
+    })
   })
 </script>
 <?php include 'footer.php' ?>

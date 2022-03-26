@@ -10,6 +10,11 @@ if($action == 'login'){
 	if($login)
 		echo $login;
 }
+if($action == 'forgot_pwd'){
+	$pwd = $crud->forgot_pwd();
+	if($pwd)
+		echo $pwd;
+}
 if($action == 'login2'){
 	$login = $crud->login2();
 	if($login)

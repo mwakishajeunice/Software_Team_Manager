@@ -1,6 +1,9 @@
 <?php
 session_start();
 ini_set('display_errors', 1);
+
+include_once './mail.php';
+
 Class Action {
 	private $db;
 
@@ -26,6 +29,35 @@ Class Action {
 				return 1;
 		}else{
 			return 2;
+		}
+	}
+	function forgot_pwd(){
+		$user_email = $_POST['email'];
+		$user_email;
+		$qry = $this->db->query("SELECT * FROM users where email = '".$user_email."' ");
+		if($qry->num_rows > 0){
+			$user = mysqli_fetch_row($qry);
+			// print_r($user);
+			//generate random password
+			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			$pass_length = 8;
+     		$pass = substr(str_shuffle($chars),0, $pass_length);
+			//update user password
+			$update = $this->db->query("UPDATE users SET password = md5('" .$pass . "') WHERE email = '".$user_email."' ");
+			if($update){
+				//send email to user with a password
+				$email = new Email();
+				$email->to = $user_email;
+				$email->subject = "Forgot Password Request";
+				$email->message = "<p> Hello " .$user_email. ", </br>Your Password is: " . $pass ."</p>";	
+				$email->message .= "<p>Change password after login</p>";
+				return $email->sendEmail();
+					
+			}else{
+				return 3;
+			}
+		} else {
+			return 4;
 		}
 	}
 	function logout(){
