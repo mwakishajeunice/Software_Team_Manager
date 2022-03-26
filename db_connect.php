@@ -2,7 +2,7 @@
 $servername = "localhost";
 $dbname = "tms_db";
 $username = "root"; //favour
-$password = "";
+$password = ""; //@Favour2017
 $port = 3307;
 
 // Create connection
