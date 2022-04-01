@@ -51,7 +51,11 @@ Class Action {
 				$email->subject = "Forgot Password Request";
 				$email->message = "<p> Hello " .$user_email. ", </br>Your Password is: " . $pass ."</p>";	
 				$email->message .= "<p>Change password after login</p>";
-				return $email->sendEmail();
+				$result = $email->sendEmail();
+				
+				if($result)
+					return 1;
+				return 2;
 					
 			}else{
 				return 3;
@@ -113,10 +117,26 @@ Class Action {
 			$save = $this->db->query("UPDATE users set $data where id = $id");
 		}
 
-		if($save){
-			return 1;
+		if($save && empty($id)){
+			$role = $type == 1 ? 'Admin' : ($type == 2 ? 'Project Manager' : 'Developer');
+			//send email to user
+			$_email = new Email();
+			$_email->to = $email;
+			$_email->subject = "Your have been registered";
+			$_email->message = "<p> Hello " .$email. ", </br>Your $role account has been created <br />" 
+				. "Login Details: <br /> Email: " .$email . " <br />Password: " .$password ."</p>";	
+			$_email->message .= "<p>Change password after login</p>";
+			
+			$result = $_email->sendEmail();
+			
+			if($result){
+				return 1;
+			}
+			return 3;
 		}
+		return 4;
 	}
+
 	function signup(){
 		extract($_POST);
 		$data = "";

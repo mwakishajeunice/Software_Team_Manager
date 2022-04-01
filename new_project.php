@@ -28,15 +28,16 @@
 			<div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">Start Date</label>
-              <input type="date" class="form-control form-control-sm" autocomplete="off" name="start_date" value="<?php echo isset($start_date) ? date("Y-m-d",strtotime($start_date)) : '' ?>">
+              <input type="date" class="form-control form-control-sm" autocomplete="off" id="start_date" name="start_date" value="<?php echo isset($start_date) ? date("Y-m-d",strtotime($start_date)) : '' ?>">
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">End Date</label>
-              <input type="date" class="form-control form-control-sm" autocomplete="off" name="end_date" value="<?php echo isset($end_date) ? date("Y-m-d",strtotime($end_date)) : '' ?>">
+              <input type="date" class="form-control form-control-sm" autocomplete="off" id="end_date" name="end_date" value="<?php echo isset($end_date) ? date("Y-m-d",strtotime($end_date)) : '' ?>">
             </div>
           </div>
+		  
 		</div>
         <div class="row">
         	<?php if($_SESSION['login_type'] == 1 ): ?>
@@ -93,8 +94,22 @@
 	</div>
 </div>
 <script>
+	var startDate = document.querySelector('#start_date');
+	var endDate = document.querySelector('#end_date');
+
+	endDate.addEventListener('change', (evt) => {
+	if(startDate.value > evt.target.value){
+		alert_toast('Inavlid end date',"error");
+	}
+	});
+
 	$('#manage-project').submit(function(e){
+
 		e.preventDefault()
+		if(startDate.value > endDate.value){
+			alert_toast('Inavlid end date',"error");
+			return false;
+		}
 		start_load()
 		$.ajax({
 			url:'ajax.php?action=save_project',

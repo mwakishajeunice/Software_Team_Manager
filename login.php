@@ -113,7 +113,8 @@ header("location:index.php?page=home");
           console.log({resp});
 
           if(resp == 1){
-            location.href ='index.php?page=login';
+            $('#login-form').prepend('<div class="alert alert-success">Please check your email for login instructions</div>')
+            end_load();
           }else if(resp == 2){
             $('#login-form').prepend('<div class="alert alert-danger">Could not perform action. Try later.</div>')
             end_load();

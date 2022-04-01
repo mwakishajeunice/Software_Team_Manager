@@ -121,6 +121,7 @@
 		    method: 'POST',
 		    type: 'POST',
 			success:function(resp){
+				console.log({resp})
 				if(resp == 1){
 					alert_toast('Data successfully saved.',"success");
 					setTimeout(function(){
@@ -129,6 +130,13 @@
 				}else if(resp == 2){
 					$('#msg').html("<div class='alert alert-danger'>Email already exist.</div>");
 					$('[name="email"]').addClass("border-danger")
+					end_load()
+				}else if(resp == 3){
+					alert_toast('Data successfully saved. But could not send email to user',"warning");
+					end_load()
+				}
+				else{
+					alert_toast('Unknown error occured while saving new user',"danger");
 					end_load()
 				}
 			}

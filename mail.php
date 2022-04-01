@@ -6,7 +6,7 @@ class Email{
     public $message;
 
     public function __construct(){
-        $this->from = "mwakishajeunice2017@gmail.com";
+        $this->from = "jeunice.shakimwa@gmail.com";
     }
     
     //send email
