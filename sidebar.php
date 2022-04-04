@@ -1,4 +1,4 @@
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+ <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <div class="dropdown">
    	<a href="./" class="brand-link">
         <?php if($_SESSION['login_type'] == 1): ?>
@@ -85,6 +85,22 @@
             </ul>
           </li>
         <?php endif; ?>
+        <?php if($_SESSION['login_type'] == 1): ?>
+          <li class="nav-item">
+            <a href="./index.php?page=support_requests" class="nav-link nav-support">
+              <i class="fas fa-envelope nav-icon"></i>
+              <p>Support Request <span class="badge text-danger pull-right"  id="support_request_count"></span></p>
+            </a>
+          </li>
+        <?php endif; ?>
+        <?php if($_SESSION['login_type'] != 1): ?>
+          <li class="nav-item">
+            <a href="./index.php?page=support" class="nav-link nav-support">
+              <i class="fas fa-envelope nav-icon"></i>
+              <p>Support</p>
+            </a>
+          </li>
+        <?php endif; ?>
         </ul>
       </nav>
     </div>
@@ -107,5 +123,18 @@
 
   		}
      
-  	})
+      function getSupportRequestCount(){
+        $.ajax({
+            url:'ajax.php?action=get_support_request_count',
+            method:'GET',
+            success:function(resp){
+              if(resp > 0){
+                $('#support_request_count').text(resp);
+              }
+            }
+        });
+      }
+
+      getSupportRequestCount();
+  	});
   </script>

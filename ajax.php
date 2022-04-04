@@ -86,5 +86,31 @@ if($action == 'get_report'){
 	if($get)
 		echo $get;
 }
+if($action == 'support'){
+	$save = $crud->support();
+	if($save)
+		echo $save;
+}
+if($action == 'get_support_request_count'){
+	$save = $crud->get_support_request_count();
+	if($save)
+		echo $save;
+}
+
+if($action == 'get_support_requests'){
+	$save = $crud->get_support_request_count();
+	if($save)
+		echo $save;
+}
+if($action == 'get_single_support_request'){
+	$save = $crud->get_single_support_request();
+	if($save)
+		echo $save;
+}
+if($action == 'support_reply'){
+	$save = $crud->support_reply();
+	if($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

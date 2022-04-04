@@ -113,6 +113,19 @@ $(function () {
             [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
         ]
     })
+	$('.summernote-sm').summernote({
+        height: 120,
+        toolbar: [
+            [ 'style', [ 'style' ] ],
+            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+            [ 'fontname', [ 'fontname' ] ],
+            [ 'fontsize', [ 'fontsize' ] ],
+            [ 'color', [ 'color' ] ],
+            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+            [ 'table', [ 'table' ] ],
+            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+        ]
+    })
 
      $('.datetimepicker').datetimepicker({
 		  format:'Y/m/d H:i',

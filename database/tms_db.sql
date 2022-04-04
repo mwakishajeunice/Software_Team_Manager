@@ -79,6 +79,7 @@ INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cov
 CREATE TABLE `task_list` (
   `id` int(30) NOT NULL,
   `project_id` int(30) NOT NULL,
+  `user_id` int(30) NOT NULL,
   `task` varchar(200) NOT NULL,
   `description` text NOT NULL,
   `status` tinyint(4) NOT NULL,
@@ -89,11 +90,11 @@ CREATE TABLE `task_list` (
 -- Dumping data for table `task_list`
 --
 
-INSERT INTO `task_list` (`id`, `project_id`, `task`, `description`, `status`, `date_created`) VALUES
-(1, 1, 'Sample Task 1', '								&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Open Sans&amp;quot;, Arial, sans-serif; font-size: 14px; text-align: justify;&quot;&gt;Fusce ullamcorper mattis semper. Nunc vel risus ipsum. Sed maximus dapibus nisl non laoreet. Pellentesque quis mauris odio. Donec fermentum facilisis odio, sit amet aliquet purus scelerisque eget.&amp;nbsp;&lt;/span&gt;													', 3, '2020-12-03 11:08:58'),
-(2, 1, 'Sample Task 2', 'Sample Task 2							', 1, '2020-12-03 13:50:15'),
-(3, 2, 'Task Test', 'Sample', 1, '2020-12-03 13:52:25'),
-(4, 2, 'test 23', 'Sample test 23', 1, '2020-12-03 13:52:40');
+INSERT INTO `task_list` (`id`, `project_id`, `user_id`, `task`, `description`, `status`, `date_created`) VALUES
+(1, 1, 3, 'Sample Task 1', '								&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Open Sans&amp;quot;, Arial, sans-serif; font-size: 14px; text-align: justify;&quot;&gt;Fusce ullamcorper mattis semper. Nunc vel risus ipsum. Sed maximus dapibus nisl non laoreet. Pellentesque quis mauris odio. Donec fermentum facilisis odio, sit amet aliquet purus scelerisque eget.&amp;nbsp;&lt;/span&gt;													', 3, '2020-12-03 11:08:58'),
+(2, 1,3,  'Sample Task 2', 'Sample Task 2							', 1, '2020-12-03 13:50:15'),
+(3, 2, 4, 'Task Test', 'Sample', 1, '2020-12-03 13:52:25'),
+(4, 2, 5, 'test 23', 'Sample test 23', 1, '2020-12-03 13:52:40');
 
 -- --------------------------------------------------------
 
@@ -153,6 +154,33 @@ INSERT INTO `user_productivity` (`id`, `project_id`, `task_id`, `comment`, `subj
 (3, 1, 2, '							Sample						', 'Test', '2020-12-03', '08:00:00', '09:00:00', 5, 1, '2020-12-03 13:57:22'),
 (4, 1, 2, 'asdasdasd', 'Sample Progress', '2020-12-02', '08:00:00', '10:00:00', 2, 2, '2020-12-03 14:36:30');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `support`
+--
+
+CREATE TABLE `support`(
+  `id` int not null,
+  `user_id` int(30) not null,
+  `subject` varchar(200),
+  `message` text not null,
+  `status` int DEFAULT 0,
+  `reply` text,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+);
+
+--
+-- Dumping data for table `support`
+--
+
+INSERT INTO `support` (id, user_id, subject, message, status, reply )
+VALUE(6, 2 ,null, 'I cannot access some of the projects', 0, null),
+(7, 3, null, 'The software is too slow', 1, 'Kindly improve your bandwidth'),
+(8, 3, null, 'No tasks assigned', 0, null),
+(9, 4, null, 'Cant update task progess', 0, null);
+
+
 --
 -- Indexes for dumped tables
 --
@@ -170,21 +198,28 @@ ALTER TABLE `system_settings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `task_list`
---
-ALTER TABLE `task_list`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `task_list`
+--
+ALTER TABLE `task_list`
+  ADD PRIMARY KEY (`id`);
+
+
+--
 -- Indexes for table `user_productivity`
 --
 ALTER TABLE `user_productivity`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `support`
+--
+ALTER TABLE `support`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -209,6 +244,12 @@ ALTER TABLE `system_settings`
 ALTER TABLE `task_list`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
+ALTER TABLE `task_list`
+  ADD FOREIGN KEY (project_id) REFERENCES projects(id);
+
+ALTER TABLE `task_list`
+  ADD FOREIGN KEY (user_id) REFERENCES users(id);
+
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -220,8 +261,17 @@ ALTER TABLE `users`
 --
 ALTER TABLE `user_productivity`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-COMMIT;
 
+--
+-- AUTO_INCREMENT for table `support`
+--
+ALTER TABLE `support`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+ALTER TABLE `support`
+  ADD FOREIGN KEY (user_id) REFERENCES users(id);
+
+COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

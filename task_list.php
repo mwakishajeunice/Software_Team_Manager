@@ -134,9 +134,9 @@
 	$(document).ready(function(){
                 
 		$('#list').dataTable()
-	$('.new_productivity').click(function(){
-		uni_modal("<i class='fa fa-plus'></i> New Progress for: "+$(this).attr('data-task'),"manage_progress.php?pid="+$(this).attr('data-pid')+"&tid="+$(this).attr('data-tid'),'large')
-	})
+		$('.new_productivity').click(function(){
+			uni_modal("<i class='fa fa-plus'></i> New Progress for: "+$(this).attr('data-task'),"manage_progress.php?pid="+$(this).attr('data-pid')+"&tid="+$(this).attr('data-tid'),'large')
+		})
 	})
 	function delete_project($id){
 		start_load()
@@ -147,10 +147,6 @@
 			success:function(resp){
 				if(resp==1){
 					alert_toast("Data successfully deleted",'success')
-					setTimeout(function(){
-						location.reload()
-					},1500)
-
 				}
 			}
 		})

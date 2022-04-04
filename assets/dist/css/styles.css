@@ -125,3 +125,8 @@
   max-height: calc(100%);
   max-width: calc(100%);
 }
+
+
+.support-0 .card-title, .support-0  .card-subtitle{
+  font-weight: bolder !important;
+}

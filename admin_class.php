@@ -401,4 +401,101 @@ Class Action {
 		return json_encode($data);
 
 	}
+
+	function support(){
+		extract($_POST);
+		$data = "";
+
+		$sub = htmlentities(str_replace("'","&#x2019;",$subject));
+		$msg = htmlentities(str_replace("'","&#x2019;",$message));
+
+		$save = $this->db->query("INSERT INTO support(user_id, subject, message) VALUES($user_id, '$sub', '$msg')");
+		
+		if($save){
+			$name = $_SESSION['login_name'];
+			$email= $_SESSION['login_email'];
+			$role = $_SESSION['login_type'] == 1 ? 'Admin' : ($_SESSION['login_type'] == 2 ? 'Project Manager' : 'Developer');
+			
+			$_email = new Email();
+			$_email->to = 'jeunice.shakimwa@gmail.com';
+			$_email->subject = "You have a new message from " . $_SESSION['login_name'];
+			$_email->message ="
+						<p><strong>User: </strong>$name</p>
+						<p><strong>Email: </strong> $email</p>
+						<p><strong>Role: </strong> $role</p>
+						<p>Dear Admin,</p>
+						<div>$message</div>";	
+			
+			$result = $_email->sendEmail();
+			
+			if($result){
+				return 1;
+			}
+			return 2;
+		}
+		return 3;
+
+	}
+
+	function support_reply(){
+		extract($_POST);
+		$msg = htmlentities(str_replace("'","&#x2019;",$reply));
+
+		$save = $this->db->query("UPDATE support SET reply='$msg' status=1 where id =$support_id");
+		
+		if($save){
+			$_email = new Email();
+			$_email->to = $support_email;
+			$_email->subject = "Your message has been replied by " . $_SESSION['login_name'];
+			$_email->message ="
+						<p>Dear $support_name,</p>
+						<div>$reply</div>";	
+			
+			$result = $_email->sendEmail();
+			
+			if($result){
+				return 1;
+			}
+			return 2;
+		}
+		return 3;
+
+	}
+	function get_single_support_request(){
+		extract($_POST);
+		$request = null;
+		$this->db->query("UPDATE support set status=1 where id = $id");
+
+		$qry = $this->db->query("SELECT support.*, concat(firstname, ' ' , lastname) as name, type, email FROM support LEFT JOIN users ON support.user_id = users.id WHERE support.id = $id LIMIT 1");
+		if($qry->num_rows > 0){
+			
+
+			while($row = $qry->fetch_assoc()){
+			$role = $row['type'] == 1 ? 'Admin' : ($row['type'] == 2 ? 'Project Manager' : 'Developer');
+			  $item = array(
+				"id" => $row['id'],
+				"subject" => $row['subject'],
+				"message" => $row['message'],
+				"reply" => $row['reply'],
+				"date_created" => $row['date_created'],
+				"status" => $row['status'],
+				"user_id" => $row['user_id'],
+				"user_name" => $row['name'],
+				"user_email" => $row['email'],
+				"user_role" => $role
+			  );
+			  $request = $item;
+			}
+		}
+		return json_encode($request);
+	}
+	function get_support_request_count(){
+		$data = 0;
+		$get = $this->db->query("SELECT COUNT(id) as requests FROM support where datediff(now(), date_created) < 7 and status = 0 ");
+		while($row= $get->fetch_assoc()){
+			$data = (int)$row['requests'];
+		}
+		return json_encode($data);
+	}
 }
+
