@@ -69,8 +69,7 @@
 					<tr id="<?php echo ucwords($row['pid']) ?>" data-pname="<?php echo ucwords($row['pname']) ?>" data-pid="<?php echo ucwords($row['pid']) ?>">
 						<td class="text-center"><?php echo $i++ ?></td>
 						<td>
-							<p><b><?php echo ucwords($row['pname']) ?></b></p>
-                                                        <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="index.php?page=view_project&id=<?php echo ucwords($row['pid']) ?>"><i class="fa fa-plus"></i> Task</a>
+							<a class="card-link" href="index.php?page=view_project&id=<?php echo ucwords($row['pid']) ?>"><?php echo ucwords($row['pname']) ?></a>
 						</td>
 						<td>
 							<p><b><?php echo ucwords($row['task']) ?></b></p>

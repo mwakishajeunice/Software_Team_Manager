@@ -89,6 +89,7 @@ header("location:index.php?page=home");
             location.href ='index.php?page=home';
           }else{
             $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
+            // $('#login-form').prepend('<div class="alert alert-danger">Invalid User.</div>')
             end_load();
           }
         }
