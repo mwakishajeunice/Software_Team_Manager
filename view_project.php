@@ -177,7 +177,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 					                      <?php if($_SESSION['login_type'] != 3): ?>
 					                      <a class="dropdown-item edit_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"  data-task="<?php echo $row['task'] ?>">Edit</a>
 					                      <div class="dropdown-divider"></div>
-					                      <a class="dropdown-item delete_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Delete</a>
+					                      <a class="dropdown-item delete_task" href="javascript:void(0)" data-taskId="<?php echo $row['id'] ?>">Delete</a>
 					                  <?php endif; ?>
 					                    </div>
 									</td>
@@ -286,19 +286,38 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 	$('.delete_progress').click(function(){
 	_conf("Are you sure to delete this progress?","delete_progress",[$(this).attr('data-id')])
 	})
-	function delete_progress($id){
+
+	$('.delete_task').click( (evt) => {
+		start_load()
+		let taskId = evt.target.getAttribute('data-taskId');
+		alert(taskId);
+		$.ajax({
+			url:`ajax.php?action=delete_task`,
+			method:'POST',
+			data:{id:taskId},
+			success:function(resp){
+				if(resp==1){
+					alert_toast("Task successfully deleted",'success')
+					setTimeout(function(){
+						location.reload()
+					},1500)
+
+				}
+			},
+			error: function (err) {
+				end_load();
+			}
+		})
+	});
+	function delete_project($id){
 		start_load()
 		$.ajax({
-			url:'ajax.php?action=delete_progress',
+			url:'ajax.php?action=delete_project',
 			method:'POST',
 			data:{id:$id},
 			success:function(resp){
 				if(resp==1){
 					alert_toast("Data successfully deleted",'success')
-					setTimeout(function(){
-						location.reload()
-					},1500)
-
 				}
 			}
 		})
